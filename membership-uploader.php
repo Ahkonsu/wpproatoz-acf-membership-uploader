@@ -276,7 +276,87 @@ add_action('wp_head', 'iv_add_custom_styles');
 function iv_add_custom_styles() {
     echo '<style>
     .iv-success-message { color: #008000; font-weight: bold; margin-bottom: 20px; text-align: center; }
-    /* ... rest of your original custom styles ... */
+    .acf-basic-uploader {
+        text-align: center;
+        padding: 40px 30px;
+        border: 3px dashed #ccc;
+        border-radius: 10px;
+        background: #f9f9f9;
+        margin-bottom: 30px;
+    }
+    .acf-basic-uploader.has-value { border-style: solid; }
+    .acf-field .description {
+        display: block !important;
+        visibility: visible !important;
+        color: #e67e22 !important;
+        font-style: italic !important;
+        font-size: 1.1em !important;
+        text-align: center !important;
+        margin: 15px 0 25px 0 !important;
+        line-height: 1.5;
+        padding: 0 20px;
+    }
+    .acf-field-image .acf-actions a[data-name="edit"],
+    .acf-field-file .acf-actions a[data-name="edit"],
+    .acf-field-image .file-info,
+    .acf-field-file .file-info {
+        display: none !important;
+    }
+    .pe-tracker-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.pe-tracker-section h2 {
+    margin-top: 0;
+    color: #1e3a8a;
+}
+
+.pe-tracker-form .acf-form-submit {
+    margin-top: 20px;
+}
+.pe-tracker-tab-content {
+    margin-top: 30px;
+    padding: 25px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.pe-tracker-tab-content h2 {
+    margin-top: 0;
+    color: #1e3a8a;
+}
+.pe-tracker-tab-content {
+    margin: 30px 0;
+    padding: 30px;
+    background: #f8f9fa;
+    border: 2px solid #0073aa;
+    border-radius: 10px;
+}
+.pe-tracker-link-box {
+    margin: 40px 0;
+    padding: 30px;
+    background: #f0f8ff;
+    border: 2px solid #0073aa;
+    border-radius: 10px;
+    text-align: center;
+}
+.pe-tracker-full-section {
+    margin: 40px 0;
+    padding: 35px;
+    background: #f8fbff;
+    border: 3px solid #0073aa;
+    border-radius: 12px;
+}
+
+.pe-tracker-full-section h2 {
+    margin-top: 0;
+    color: #1e40af;
+}
     </style>';
 }
 
@@ -586,15 +666,40 @@ function iv_manage_submissions_page() {
  <?php
 }
 // ====================== PMPro ACCOUNT INTEGRATION ======================
-add_action('pmpro_account_after_membership', 'pe_tracker_add_account_section');
-function pe_tracker_add_account_section() {
+// ====================== FORCE CUSTOM TAB / LINK ======================
+/**
+ * === FORCE PE TRACKER ON PMPro ACCOUNT PAGE ===
+ * This bypasses hook issues by using a high-priority action + direct output
+ */
+add_action('pmpro_after_account', 'pe_tracker_force_on_account_page', 99);
+
+function pe_tracker_force_on_account_page() {
     if (!pmpro_hasMembershipLevel() || !is_user_logged_in()) {
         return;
     }
 
-    echo '<div class="pmpro_account-section pe-tracker-section">';
-    echo '<h2>My PE Tracker</h2>';
-    echo '<p>Manage your images and video below. Limits are based on your membership tier.</p>';
+    $entry_id = pe_get_or_create_user_entry();
+    if (!$entry_id) {
+        return;
+    }
+
+    $image_key = get_option('iv_image_field_key', '');
+    $video_key = get_option('iv_video_field_key', '');
+    $fields    = array_filter([$image_key, $video_key]);
+
+    if (empty($fields)) {
+        echo '<div style="padding:20px; background:#fff0f0; border:2px solid red; margin:20px 0;">';
+        echo 'Please configure your ACF Image and Video field keys in Membership Uploader → Settings.';
+        echo '</div>';
+        return;
+    }
+
+    echo '<div class="pe-tracker-full-section" style="margin: 40px 0; padding: 35px; background:#f8fbff; border:3px solid #0073aa; border-radius:12px;">';
+    echo '<h2 style="margin-top:0; color:#1e40af;">📸 My PE Tracker</h2>';
+    echo '<p style="font-size:1.1em;">Upload or update your images and video. Limits are based on your current membership tier.</p>';
+
+    // Render the form using your existing shortcode logic
     echo do_shortcode('[pe_tracker_uploader]');
+
     echo '</div>';
 }
