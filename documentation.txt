@@ -1,0 +1,83 @@
+ACF Image & Video Frontend Submission Form - Documentation
+Overview
+The ACF Image & Video Frontend Submission Form plugin enables users to submit image and video uploads via a frontend form, integrated with Advanced Custom Fields Pro (ACF Pro). It uses a configurable custom post type (default: image-video-submission) with fields for title, content, and upload. The plugin includes customizable field labels, upload restrictions, reCAPTCHA v2/v3, public/private form access, and admin management tools.
+Shortcodes
+
+[image_video_submission]
+
+
+Displays a frontend form for submitting submissions.
+Fields: Title, Content, Upload (30 MB max, .mov, .mp4, .m4v).
+Usage: Add [image_video_submission] to a page or post content.
+Behavior:
+Public mode: Allows guest submissions (author set to admin, ID 1).
+Private mode: Requires logged-in users (author set to current user).
+Includes reCAPTCHA v2 (Checkbox) or v3 (Invisible) if enabled, or a honeypot for spam protection.
+Displays a warning: "Video files limited to .mov, .m4v, .mp4 files only and files limited to 30MB max."
+Submits as a Pending post for admin review.
+
+
+
+[image_video_submissions limit="5"]
+
+
+Displays a list of published submissions.
+Attributes:
+limit: Number of submissions to show (default: 5).
+
+Usage: Add [image_video_submissions limit="3"] to a page or post.
+Displays: Title, upload (if uploaded), and content for each submission.
+
+Setup Instructions
+
+Installation:
+Upload the wpproatoz-acf-image-video-submission folder to /wp-content/plugins/.
+Activate the plugin via the WordPress admin Plugins page.
+Install and activate Advanced Custom Fields Pro (ACF Pro) when prompted.
+
+Configuration:
+Go to Image & Video Submissions > ACF Custom Form in the WordPress admin.
+Custom Post Type Slug: Set the CPT slug (default: image-video-submission).
+ACF Field Key: Set the upload field key (default: field_682e59ec3b45a).
+Form Access:
+Public: Allows guests to submit submissions.
+Private: Restricts to logged-in users.
+
+reCAPTCHA:
+None: Uses a honeypot for basic spam protection.
+v2 (Checkbox): Requires users to check "I'm not a robot."
+v3 (Invisible): Validates in the background with a score threshold (0.0 to 1.0, default 0.5).
+Obtain keys at https://www.google.com/recaptcha/admin and enter Site Key and Secret Key.
+
+Field Labels:
+Customize labels for Title, Content, and Upload (e.g., "Submission Title", "Description", "Upload Image/Video").
+
+Save settings.
+
+Using Shortcodes:
+Create a page (e.g., "Submit Submission") and add [image_video_submission].
+Create a page (e.g., "Submissions") and add [image_video_submissions limit="5"].
+Ensure the CPT and upload field are set up in ACF Pro.
+
+Managing Submissions:
+Go to Image & Video Submissions > All Submissions to view submissions.
+Use Image & Video Submissions > Manage Submissions to toggle statuses (Publish, Private, Draft).
+Published submissions appear on the frontend via [image_video_submissions].
+
+Upload Restrictions:
+Files must be .mov, .mp4, or .m4v.
+Maximum size: 30 MB.
+A warning message appears below the Upload field.
+Client-side and server-side validation enforce restrictions.
+
+
+Troubleshooting
+
+Form Not Displaying: Ensure ACF Pro is active and the CPT exists.
+Upload Fails: Check php.ini settings (upload_max_filesize = 30M, post_max_size = 32M).
+Labels Not Updating: Clear browser/server cache and verify settings in ACF Custom Form.
+reCAPTCHA Issues: Confirm valid keys and correct domain at https://www.google.com/recaptcha/admin.
+Debugging: Check /wp-content/debug.log if debug mode is enabled (WP_DEBUG = true).
+
+Support
+Contact WPProAtoZ at https://wpproatoz.com for assistance.
