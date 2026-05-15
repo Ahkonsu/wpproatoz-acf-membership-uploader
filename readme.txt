@@ -5,7 +5,7 @@ Tags: acf, membership, frontend upload, paid memberships pro, image upload, vide
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,9 @@ Yes — it falls back to basic functionality, but tier limits require PMPro.
 3. Admin submissions list
 
 == Changelog ==
+
+= 2.0.1 =
+* Working on intergration for member tiers and limiits on files sizes ect
 
 = 2.0.0 =
 * Complete rewrite for membership sites

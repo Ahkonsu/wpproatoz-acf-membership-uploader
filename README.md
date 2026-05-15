@@ -1,6 +1,12 @@
 # WPProAtoZ ACF Membership Uploader
 
-**Version 2.0.0**
+
+![Plugin Version](https://img.shields.io/badge/version-1.3.9-blue)
+![WordPress Compatibility](https://img.shields.io/badge/WordPress-6.0%2B-green)
+![PHP Compatibility](https://img.shields.io/badge/PHP-8.0%2B-green)
+![License](https://img.shields.io/badge/license-GPLv2%2B-blue)
+
+**Version 2.0.1**
 
 Frontend ACF uploader designed for paid membership websites. One entry per user with dynamic tier limits based on Paid Memberships Pro.
 
