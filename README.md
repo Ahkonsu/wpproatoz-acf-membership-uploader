@@ -1,7 +1,7 @@
 # WPProAtoZ ACF Membership Uploader
 
 
-![Plugin Version](https://img.shields.io/badge/version-1.3.9-blue)
+![Plugin Version](https://img.shields.io/badge/version-2.0.1-blue)
 ![WordPress Compatibility](https://img.shields.io/badge/WordPress-6.0%2B-green)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-8.0%2B-green)
 ![License](https://img.shields.io/badge/license-GPLv2%2B-blue)
