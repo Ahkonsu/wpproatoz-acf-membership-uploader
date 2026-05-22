@@ -1,11 +1,11 @@
-WPPROATOZ-ACF-IMAGE-VIDEO-SUBMISSION
+WPPROATOZ-ACF-MEMBERSHIP-UPLOADER
 ª   class-tgm-plugin-activation.php
 ª   documentation.txt
 ª   image-video-uploader.php
 ª   LICENSE
 ª   README.md
 ª   readme.txt
-ª   vt-custom.js
+ª   iv-custom.js
 ª   
 +---plugin-update-checker
     ª   composer.json
