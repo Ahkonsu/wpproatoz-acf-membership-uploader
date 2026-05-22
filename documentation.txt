@@ -1,117 +1,83 @@
-=== WPProAtoZ ACF Membership Uploader - Documentation ===
+ACF Image & Video Frontend Submission Form - Documentation
+Overview
+The ACF Image & Video Frontend Submission Form plugin enables users to submit image and video uploads via a frontend form, integrated with Advanced Custom Fields Pro (ACF Pro). It uses a configurable custom post type (default: image-video-submission) with fields for title, content, and upload. The plugin includes customizable field labels, upload restrictions, reCAPTCHA v2/v3, public/private form access, and admin management tools.
+Shortcodes
 
-Version: 2.0.1
-Last Updated: May 2026
+[image_video_submission]
 
-== Overview ==
 
-The WPProAtoZ ACF Membership Uploader is a specialized frontend upload plugin built for paid membership websites. It enables logged-in members to create and manage **one single Pet Tracker entry** using Advanced Custom Fields Pro (ACF Pro).
+Displays a frontend form for submitting submissions.
+Fields: Title, Content, Upload (30 MB max, .mov, .mp4, .m4v).
+Usage: Add [image_video_submission] to a page or post content.
+Behavior:
+Public mode: Allows guest submissions (author set to admin, ID 1).
+Private mode: Requires logged-in users (author set to current user).
+Includes reCAPTCHA v2 (Checkbox) or v3 (Invisible) if enabled, or a honeypot for spam protection.
+Displays a warning: "Video files limited to .mov, .m4v, .mp4 files only and files limited to 30MB max."
+Submits as a Pending post for admin review.
 
-Designed specifically for **Petracker.com**, the plugin supports rapid community mobilization when a pet goes missing by allowing members to upload photos and a video of their pet, which can then be shared with designated neighbors.
 
-This plugin replaces the older "ACF Image & Video Frontend Submission" functionality with a more powerful, membership-focused system featuring one-entry-per-user logic and dynamic tier limits based on Paid Memberships Pro (PMPro).
 
-== Mission Alignment ==
+[image_video_submissions limit="5"]
 
-Petracker.com turns the panic of a missing pet into immediate, pre-planned action. 
 
-By providing a simple, instant plan-of-action, we create hope and community involvement. The first critical step is notifying neighbors. A well-made video of the missing pet, previously introduced to the community, triggers sympathy and the human helper instinct.
+Displays a list of published submissions.
+Attributes:
+limit: Number of submissions to show (default: 5).
 
-This plugin powers the frontend upload experience so members can quickly build their Pet Tracker and get the word out.
+Usage: Add [image_video_submissions limit="3"] to a page or post.
+Displays: Title, upload (if uploaded), and content for each submission.
 
-== Key Features ==
+Setup Instructions
 
-- One Entry Per User: Automatically loads or creates the member's single Pet Tracker post
-- Dynamic Tier Limits: Adjusts maximum images and video size based on the user's current PMPro membership level
-- ACF Pro Integration: Works with your existing Gallery field (images) and File field (video)
-- PMPro Account Page Integration: Automatically adds a "My PE Tracker" section to the membership account area
-- Spam Protection: reCAPTCHA v3 (invisible) + honeypot fallback
-- Admin Moderation: New submissions start as Drafts (configurable)
-- Shortcode Ready: Easy placement on any protected page
-- Clean, Responsive Frontend Form
+Installation:
+Upload the wpproatoz-acf-image-video-submission folder to /wp-content/plugins/.
+Activate the plugin via the WordPress admin Plugins page.
+Install and activate Advanced Custom Fields Pro (ACF Pro) when prompted.
 
-== Requirements ==
+Configuration:
+Go to Image & Video Submissions > ACF Custom Form in the WordPress admin.
+Custom Post Type Slug: Set the CPT slug (default: image-video-submission).
+ACF Field Key: Set the upload field key (default: field_682e59ec3b45a).
+Form Access:
+Public: Allows guests to submit submissions.
+Private: Restricts to logged-in users.
 
-- WordPress 6.0+
-- Advanced Custom Fields Pro (ACF Pro)
-- Paid Memberships Pro (PMPro) - required for tiered limits
-- reCAPTCHA v3 keys (optional but recommended)
+reCAPTCHA:
+None: Uses a honeypot for basic spam protection.
+v2 (Checkbox): Requires users to check "I'm not a robot."
+v3 (Invisible): Validates in the background with a score threshold (0.0 to 1.0, default 0.5).
+Obtain keys at https://www.google.com/recaptcha/admin and enter Site Key and Secret Key.
 
-== Installation ==
+Field Labels:
+Customize labels for Title, Content, and Upload (e.g., "Submission Title", "Description", "Upload Image/Video").
 
-1. Upload the plugin folder to `/wp-content/plugins/wpproatoz-acf-membership-uploader/`
-2. Activate the plugin through the WordPress Plugins admin screen
-3. Install and activate Advanced Custom Fields Pro and Paid Memberships Pro if not already active
-4. Go to **Membership Uploader → Settings** in the WordPress admin menu
+Save settings.
 
-== Plugin Configuration ==
+Using Shortcodes:
+Create a page (e.g., "Submit Submission") and add [image_video_submission].
+Create a page (e.g., "Submissions") and add [image_video_submissions limit="5"].
+Ensure the CPT and upload field are set up in ACF Pro.
 
-After activation, configure the plugin at **Membership Uploader → Settings**:
+Managing Submissions:
+Go to Image & Video Submissions > All Submissions to view submissions.
+Use Image & Video Submissions > Manage Submissions to toggle statuses (Publish, Private, Draft).
+Published submissions appear on the frontend via [image_video_submissions].
 
-**Core Settings:**
-- Custom Post Type Slug (default: `pe_tracker`)
-- ACF Gallery Field Key (for images)
-- ACF Video File Field Key (for video)
-- Default Post Status (Draft or Publish)
+Upload Restrictions:
+Files must be .mov, .mp4, or .m4v.
+Maximum size: 30 MB.
+A warning message appears below the Upload field.
+Client-side and server-side validation enforce restrictions.
 
-**Membership Tier Limits:**
-- Configure maximum number of images and maximum video size (in MB) for each PMPro membership level
 
-**reCAPTCHA:**
-- Enable reCAPTCHA v3
-- Enter Site Key and Secret Key
-- Set minimum score threshold (recommended: 0.5)
+Troubleshooting
 
-**Form Labels & Text:**
-- Customize all frontend form labels, button text, success messages, and help text
+Form Not Displaying: Ensure ACF Pro is active and the CPT exists.
+Upload Fails: Check php.ini settings (upload_max_filesize = 30M, post_max_size = 32M).
+Labels Not Updating: Clear browser/server cache and verify settings in ACF Custom Form.
+reCAPTCHA Issues: Confirm valid keys and correct domain at https://www.google.com/recaptcha/admin.
+Debugging: Check /wp-content/debug.log if debug mode is enabled (WP_DEBUG = true).
 
-== Usage ==
-
-Add the following shortcode to a page that is restricted to logged-in members (using PMPro):
-
-`[pe_tracker_uploader]`
-
-This will display the complete frontend form with:
-- Pet information fields
-- Image gallery uploader
-- Video uploader
-- Submit / Update button
-
-The plugin automatically:
-- Finds the user's existing Pet Tracker (if any)
-- Enforces tier limits
-- Handles file validation and upload
-- Saves to the configured Custom Post Type
-
-== PMPro Integration ==
-
-The plugin automatically adds a new section titled **"My PE Tracker"** to the Paid Memberships Pro Account page. Members can access their tracker directly from their account dashboard.
-
-== Shortcodes ==
-
-- `[pe_tracker_uploader]` — Main frontend form (recommended)
-
-== Troubleshooting ==
-
-Common issues and solutions:
-
-1. **Form not showing** → Ensure the page is behind a PMPro membership level and the user is logged in.
-2. **Upload fields missing** → Double-check that the correct ACF field keys are entered in plugin settings.
-3. **Tier limits not applying** → Confirm the user has an active PMPro membership level.
-4. **reCAPTCHA not working** → Verify Site and Secret keys are correct.
-
-== Developer Notes ==
-
-- The plugin is built to be extended. Key hooks and filters are available.
-- All major functionality is contained in `membership-uploader.php`
-- CSS and JS are in the `/css/` and root directories respectively.
-
-== Support ==
-
-For support, feature requests, or custom development related to Petracker.com:
-- GitHub: https://github.com/Ahkonsu/wpproatoz-acf-membership-uploader
-- Website: https://petrackers.com/
-
-Your pet, our pets and our neighbours’ pets are loved.
-
-When they go missing, Petracker.com helps turn despair into action.
+Support
+Contact WPProAtoZ at https://wpproatoz.com for assistance.

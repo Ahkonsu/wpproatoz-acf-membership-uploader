@@ -1,147 +1,22 @@
-WPPROATOZ-ACF-MEMBERSHIP-UPLOADER
-ª   class-tgm-plugin-activation.php
-ª   documentation.txt
-ª   image-video-uploader.php
-ª   LICENSE
-ª   README.md
-ª   readme.txt
-ª   iv-custom.js
-ª   
-+---plugin-update-checker
-    ª   composer.json
-    ª   license.txt
-    ª   load-v5p5.php
-    ª   plugin-update-checker.php
-    ª   README.md
-    ª   
-    +---css
-    ª       puc-debug-bar.css
-    ª       
-    +---js
-    ª       debug-bar.js
-    ª       
-    +---languages
-    ª       plugin-update-checker-ca.mo
-    ª       plugin-update-checker-ca.po
-    ª       plugin-update-checker-cs_CZ.mo
-    ª       plugin-update-checker-cs_CZ.po
-    ª       plugin-update-checker-da_DK.mo
-    ª       plugin-update-checker-da_DK.po
-    ª       plugin-update-checker-de_DE.mo
-    ª       plugin-update-checker-de_DE.po
-    ª       plugin-update-checker-el.mo
-    ª       plugin-update-checker-el.po
-    ª       plugin-update-checker-es_AR.mo
-    ª       plugin-update-checker-es_AR.po
-    ª       plugin-update-checker-es_CL.mo
-    ª       plugin-update-checker-es_CL.po
-    ª       plugin-update-checker-es_CO.mo
-    ª       plugin-update-checker-es_CO.po
-    ª       plugin-update-checker-es_CR.mo
-    ª       plugin-update-checker-es_CR.po
-    ª       plugin-update-checker-es_DO.mo
-    ª       plugin-update-checker-es_DO.po
-    ª       plugin-update-checker-es_ES.mo
-    ª       plugin-update-checker-es_ES.po
-    ª       plugin-update-checker-es_GT.mo
-    ª       plugin-update-checker-es_GT.po
-    ª       plugin-update-checker-es_HN.mo
-    ª       plugin-update-checker-es_HN.po
-    ª       plugin-update-checker-es_MX.mo
-    ª       plugin-update-checker-es_MX.po
-    ª       plugin-update-checker-es_PE.mo
-    ª       plugin-update-checker-es_PE.po
-    ª       plugin-update-checker-es_PR.mo
-    ª       plugin-update-checker-es_PR.po
-    ª       plugin-update-checker-es_UY.mo
-    ª       plugin-update-checker-es_UY.po
-    ª       plugin-update-checker-es_VE.mo
-    ª       plugin-update-checker-es_VE.po
-    ª       plugin-update-checker-fa_IR.mo
-    ª       plugin-update-checker-fa_IR.po
-    ª       plugin-update-checker-fr_CA.mo
-    ª       plugin-update-checker-fr_CA.po
-    ª       plugin-update-checker-fr_FR.mo
-    ª       plugin-update-checker-fr_FR.po
-    ª       plugin-update-checker-hu_HU.mo
-    ª       plugin-update-checker-hu_HU.po
-    ª       plugin-update-checker-it_IT.mo
-    ª       plugin-update-checker-it_IT.po
-    ª       plugin-update-checker-ja.mo
-    ª       plugin-update-checker-ja.po
-    ª       plugin-update-checker-nl_BE.mo
-    ª       plugin-update-checker-nl_BE.po
-    ª       plugin-update-checker-nl_NL.mo
-    ª       plugin-update-checker-nl_NL.po
-    ª       plugin-update-checker-pt_BR.mo
-    ª       plugin-update-checker-pt_BR.po
-    ª       plugin-update-checker-ru_RU.mo
-    ª       plugin-update-checker-ru_RU.po
-    ª       plugin-update-checker-sl_SI.mo
-    ª       plugin-update-checker-sl_SI.po
-    ª       plugin-update-checker-sv_SE.mo
-    ª       plugin-update-checker-sv_SE.po
-    ª       plugin-update-checker-tr_TR.mo
-    ª       plugin-update-checker-tr_TR.po
-    ª       plugin-update-checker-uk_UA.mo
-    ª       plugin-update-checker-uk_UA.po
-    ª       plugin-update-checker-zh_CN.mo
-    ª       plugin-update-checker-zh_CN.po
-    ª       plugin-update-checker.pot
-    ª       
-    +---Puc
-    ª   +---v5
-    ª   ª       PucFactory.php
-    ª   ª       
-    ª   +---v5p5
-    ª       ª   Autoloader.php
-    ª       ª   InstalledPackage.php
-    ª       ª   Metadata.php
-    ª       ª   OAuthSignature.php
-    ª       ª   PucFactory.php
-    ª       ª   Scheduler.php
-    ª       ª   StateStore.php
-    ª       ª   Update.php
-    ª       ª   UpdateChecker.php
-    ª       ª   UpgraderStatus.php
-    ª       ª   Utils.php
-    ª       ª   WpCliCheckTrigger.php
-    ª       ª   
-    ª       +---DebugBar
-    ª       ª       Extension.php
-    ª       ª       Panel.php
-    ª       ª       PluginExtension.php
-    ª       ª       PluginPanel.php
-    ª       ª       ThemePanel.php
-    ª       ª       
-    ª       +---Plugin
-    ª       ª       Package.php
-    ª       ª       PluginInfo.php
-    ª       ª       Ui.php
-    ª       ª       Update.php
-    ª       ª       UpdateChecker.php
-    ª       ª       
-    ª       +---Theme
-    ª       ª       Package.php
-    ª       ª       Update.php
-    ª       ª       UpdateChecker.php
-    ª       ª       
-    ª       +---Vcs
-    ª               Api.php
-    ª               BaseChecker.php
-    ª               BitBucketApi.php
-    ª               GitHubApi.php
-    ª               GitLabApi.php
-    ª               PluginUpdateChecker.php
-    ª               Reference.php
-    ª               ReleaseAssetSupport.php
-    ª               ReleaseFilteringFeature.php
-    ª               ThemeUpdateChecker.php
-    ª               VcsCheckerMethods.php
-    ª               
-    +---vendor
-            Parsedown.php
-            ParsedownModern.php
-            PucReadmeParser.php
-            
+WPPROATOZ-ACF-IMAGE-VIDEO-SUBMISSION
+Proposes new
+wpproatoz-acf-membership-uploader/
+├── wpproatoz-acf-membership-uploader.php          ← Main loader file (small)
+├── includes/
+│   ├── class-settings.php
+│   ├── class-frontend.php
+│   ├── class-validation.php
+│   ├── class-pmpro-integration.php
+│   └── functions.php
+├── admin/
+│   └── settings-page.php
+├── assets/
+│   ├── css/
+│   │   └── iv-style.css
+│   └── js/
+│       └── iv-custom.js
+├── documentation.txt
+├── README.md
+├── readme.txt
+└── plugin-update-checker/   ← (keep existing folder)
 

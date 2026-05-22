@@ -1,0 +1,16 @@
+.iv-success-message {
+    color: #008000;
+    font-weight: bold;
+    padding: 15px;
+    background: #dff0d8;
+    border: 1px solid #3c763d;
+    border-radius: 4px;
+}
+
+.pe-tracker-full-section {
+    margin: 40px 0;
+    padding: 35px;
+    background: #f8fbff;
+    border: 3px solid #0073aa;
+    border-radius: 12px;
+}
