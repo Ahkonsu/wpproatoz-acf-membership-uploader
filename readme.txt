@@ -1,11 +1,11 @@
 === WPProAtoZ ACF Membership Uploader ===
-Contributors: Ahkonsu, wpproatoz
+Contributors: Ahkonsu, wpproatoz, Grok
 Donate link: https://wpproatoz.com
 Tags: acf, membership, frontend upload, paid memberships pro, image upload, video upload, membership site, tiered limits
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 2.1.0
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,6 +42,9 @@ Frontend ACF-powered image + video uploader for membership sites. One entry per 
    - Custom Post Type slug
    - ACF Gallery field key
    - ACF Video field key
+   – Pet Description / Story
+   – Emergency Email
+   – Emergency Phone Number
 4. Create your membership levels in Paid Memberships Pro
 5. Add the shortcode `[pe_tracker_uploader]` to a protected page or let it auto-appear on the PMPro Account page
 
@@ -63,6 +66,19 @@ Yes — it falls back to basic functionality, but tier limits require PMPro.
 3. Admin submissions list
 
 == Changelog ==
+
+= 2.2.5 May 28, 2026 =
+Fixed "Either / Or" upload requirement — users can now upload just images, just video, or both (no more forced dual uploads)
+Improved Current Media section: Removed non-functional delete checkboxes, added clean "Manage your media files" anchor link at the top
+Enhanced frontend Video field to properly support WordPress Media Library selection (uploader => 'wp')
+Added media library restriction to show only current user’s uploads (matching Gallery behavior)
+Added three new Pet Details fields to plugin settings page:
+– Pet Description / Story
+– Emergency Email
+– Emergency Phone Number
+Integrated new Pet Details fields into frontend form (appear above Gallery/Video)
+Updated "Current Media & Pet Information" section to display saved pet details alongside media
+General code cleanup, improved field ordering, and better user guidance on the form
 
 = 2.1.0 = May 22, 2026
 * Major plugin structure refactor - organized into clean folders (`includes/`, `admin/`, `assets/`)

@@ -2,7 +2,6 @@
 /**
  * Admin Settings Page for WPProAtoZ ACF Membership Uploader
  */
-
 if (!defined('ABSPATH')) exit;
 
 add_action('admin_menu', 'iv_add_admin_menu');
@@ -17,7 +16,6 @@ function iv_add_admin_menu() {
         'dashicons-format-image',
         30
     );
-
     add_submenu_page(
         'iv-settings',
         'Manage Submissions',
@@ -36,15 +34,20 @@ function iv_settings_page() {
 
     // ====================== SAVE SETTINGS ======================
     if (isset($_POST['iv_save_settings']) && check_admin_referer('iv_save_form_settings')) {
-        
-        $form_access            = isset($_POST['iv_form_access']) && $_POST['iv_form_access'] === 'public' ? 'public' : 'private';
-        $recaptcha_type         = in_array($_POST['iv_recaptcha_type'] ?? '', ['v2', 'v3', 'none']) ? $_POST['iv_recaptcha_type'] : 'none';
+       
+        $form_access = isset($_POST['iv_form_access']) && $_POST['iv_form_access'] === 'public' ? 'public' : 'private';
+        $recaptcha_type = in_array($_POST['iv_recaptcha_type'] ?? '', ['v2', 'v3', 'none']) ? $_POST['iv_recaptcha_type'] : 'none';
         $recaptcha_v3_threshold = floatval($_POST['iv_recaptcha_v3_threshold'] ?? 0.5);
         $recaptcha_v3_threshold = max(0.0, min(1.0, $recaptcha_v3_threshold));
-        $cpt_slug               = sanitize_text_field($_POST['iv_cpt_slug'] ?? 'pe_tracker_entry');
-        $upload_mode            = in_array($_POST['iv_upload_mode'] ?? '', ['images', 'videos', 'both']) ? $_POST['iv_upload_mode'] : 'both';
-        $image_field_key        = sanitize_text_field($_POST['iv_image_field_key'] ?? '');
-        $video_field_key        = sanitize_text_field($_POST['iv_video_field_key'] ?? '');
+        $cpt_slug = sanitize_text_field($_POST['iv_cpt_slug'] ?? 'pe_tracker_entry');
+        $upload_mode = in_array($_POST['iv_upload_mode'] ?? '', ['images', 'videos', 'both']) ? $_POST['iv_upload_mode'] : 'both';
+        $image_field_key = sanitize_text_field($_POST['iv_image_field_key'] ?? '');
+        $video_field_key = sanitize_text_field($_POST['iv_video_field_key'] ?? '');
+
+        // NEW: Pet Details Field Keys
+        $pet_description_key = sanitize_text_field($_POST['iv_pet_description_key'] ?? '');
+        $emergency_email_key = sanitize_text_field($_POST['iv_emergency_email_key'] ?? '');
+        $emergency_phone_key = sanitize_text_field($_POST['iv_emergency_phone_key'] ?? '');
 
         $max_image_mb = max(1, min(500, intval($_POST['iv_max_image_size_mb'] ?? 1)));
         $max_video_mb = max(1, min(500, intval($_POST['iv_max_video_size_mb'] ?? 30)));
@@ -57,6 +60,12 @@ function iv_settings_page() {
         update_option('iv_upload_mode', $upload_mode);
         update_option('iv_image_field_key', $image_field_key);
         update_option('iv_video_field_key', $video_field_key);
+
+        // NEW: Save Pet Detail Field Keys
+        update_option('iv_pet_description_key', $pet_description_key);
+        update_option('iv_emergency_email_key', $emergency_email_key);
+        update_option('iv_emergency_phone_key', $emergency_phone_key);
+
         update_option('iv_max_image_size_mb', $max_image_mb);
         update_option('iv_max_video_size_mb', $max_video_mb);
 
@@ -67,7 +76,7 @@ function iv_settings_page() {
                 $level_id = intval($level_id);
                 if ($level_id > 0) {
                     $new_tier_limits[$level_id] = [
-                        'max_images'   => max(1, intval($data['max_images'] ?? 5)),
+                        'max_images' => max(1, intval($data['max_images'] ?? 5)),
                         'max_video_mb' => max(1, intval($data['max_video_mb'] ?? 30))
                     ];
                 }
@@ -79,26 +88,30 @@ function iv_settings_page() {
     }
 
     // Load current values
-    $form_access            = get_option('iv_form_access', 'private');
-    $recaptcha_type         = get_option('iv_recaptcha_type', 'none');
+    $form_access = get_option('iv_form_access', 'private');
+    $recaptcha_type = get_option('iv_recaptcha_type', 'none');
     $recaptcha_v3_threshold = get_option('iv_recaptcha_v3_threshold', 0.5);
-    $recaptcha_site_key     = get_option('iv_recaptcha_site_key', '');
-    $recaptcha_secret_key   = get_option('iv_recaptcha_secret_key', '');
-    $cpt_slug               = get_option('iv_cpt_slug', 'pe_tracker_entry');
-    $upload_mode            = get_option('iv_upload_mode', 'both');
-    $image_field_key        = get_option('iv_image_field_key', '');
-    $video_field_key        = get_option('iv_video_field_key', '');
-    $max_image_mb           = get_option('iv_max_image_size_mb', 1);
-    $max_video_mb           = get_option('iv_max_video_size_mb', 30);
+    $recaptcha_site_key = get_option('iv_recaptcha_site_key', '');
+    $recaptcha_secret_key = get_option('iv_recaptcha_secret_key', '');
+    $cpt_slug = get_option('iv_cpt_slug', 'pe_tracker_entry');
+    $upload_mode = get_option('iv_upload_mode', 'both');
+    $image_field_key = get_option('iv_image_field_key', '');
+    $video_field_key = get_option('iv_video_field_key', '');
 
-    $tier_limits   = get_option('iv_tier_limits', []);
-    $pmpro_levels  = function_exists('pmpro_getAllLevels') ? pmpro_getAllLevels() : [];
+    // NEW: Load Pet Detail Field Keys
+    $pet_description_key = get_option('iv_pet_description_key', '');
+    $emergency_email_key = get_option('iv_emergency_email_key', '');
+    $emergency_phone_key = get_option('iv_emergency_phone_key', '');
 
+    $max_image_mb = get_option('iv_max_image_size_mb', 1);
+    $max_video_mb = get_option('iv_max_video_size_mb', 30);
+    $tier_limits = get_option('iv_tier_limits', []);
+    $pmpro_levels = function_exists('pmpro_getAllLevels') ? pmpro_getAllLevels() : [];
     ?>
     <div class="wrap">
         <h1>Membership Uploader Settings</h1>
-<!-- === RESTORED DETAILED INSTRUCTIONS === -->
-       <div class="notice notice-warning">
+
+        <div class="notice notice-warning">
             <p><strong>Critical: Use ACF Field Keys (not names or labels)</strong></p>
             <ol>
                 <li>Go to <strong>Custom Fields → Field Groups</strong> in the admin.</li>
@@ -106,21 +119,19 @@ function iv_settings_page() {
                 <li>Top right: Click <strong>Screen Options</strong> → Check <strong>Field Keys</strong>.</li>
                 <li>The key appears next to each field (e.g., <code>field_682e59ec3b45a</code>).</li>
                 <li>Copy and paste the <strong>exact key</strong> (starts with "field_") into the boxes below.</li>
-                <li>Field must be <strong>Gallery</strong> type for images, <strong>File</strong> type for videos.</li>
-                <li>Field group must be assigned to your CPT (or test with "All post types").</li>
             </ol>
-            <p><strong>If keys are wrong or missing, the form will appear blank with no error.</strong></p>
         </div>
 
         <form method="post" action="">
             <?php wp_nonce_field('iv_save_form_settings'); ?>
-
             <table class="form-table">
+
+                <!-- Existing fields... -->
                 <tr>
                     <th scope="row"><label for="iv_cpt_slug">Custom Post Type Slug</label></th>
                     <td>
                         <input type="text" name="iv_cpt_slug" id="iv_cpt_slug" value="<?php echo esc_attr($cpt_slug); ?>" class="regular-text">
-                        <p class="description">Exact slug of your Pet Tracker CPT (e.g. <code>pe_tracker</code> or <code>pe_tracker_entry</code>)</p>
+                        <p class="description">Exact slug of your Pet Tracker CPT</p>
                     </td>
                 </tr>
                 <tr>
@@ -147,7 +158,31 @@ function iv_settings_page() {
                         <p class="description">Field key for the File field (starts with <code>field_</code>)</p>
                     </td>
                 </tr>
-                <!-- Size limits, reCAPTCHA, etc. ... (kept the same as before) -->
+
+                <!-- ==================== NEW PET DETAIL FIELDS ==================== -->
+                <tr>
+                    <th scope="row"><label for="iv_pet_description_key">Pet Description / Story Field Key</label></th>
+                    <td>
+                        <input type="text" name="iv_pet_description_key" value="<?php echo esc_attr($pet_description_key); ?>" class="regular-text">
+                        <p class="description">ACF Field Key for "Your Pet Description - Story" (Textarea / WYSIWYG recommended)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="iv_emergency_email_key">Emergency Email Field Key</label></th>
+                    <td>
+                        <input type="text" name="iv_emergency_email_key" value="<?php echo esc_attr($emergency_email_key); ?>" class="regular-text">
+                        <p class="description">ACF Field Key for Emergency Contact Email</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="iv_emergency_phone_key">Emergency Phone Number Field Key</label></th>
+                    <td>
+                        <input type="text" name="iv_emergency_phone_key" value="<?php echo esc_attr($emergency_phone_key); ?>" class="regular-text">
+                        <p class="description">ACF Field Key for Emergency Phone Number</p>
+                    </td>
+                </tr>
+                <!-- ========================================================== -->
+
                 <tr>
                     <th scope="row"><label for="iv_max_image_size_mb">Max Image Size (MB)</label></th>
                     <td><input type="number" name="iv_max_image_size_mb" value="<?php echo esc_attr($max_image_mb); ?>" min="1" class="small-text"></td>
@@ -156,7 +191,7 @@ function iv_settings_page() {
                     <th scope="row"><label for="iv_max_video_size_mb">Max Video Size (MB)</label></th>
                     <td><input type="number" name="iv_max_video_size_mb" value="<?php echo esc_attr($max_video_mb); ?>" min="1" class="small-text"></td>
                 </tr>
-                <!-- Add other fields (form_access, recaptcha, etc.) as needed -->
+
             </table>
 
             <!-- Membership Tier Limits -->

@@ -1,12 +1,12 @@
 # WPProAtoZ ACF Membership Uploader
 
 
-![Plugin Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Plugin Version](https://img.shields.io/badge/version-2.2.5-blue)
 ![WordPress Compatibility](https://img.shields.io/badge/WordPress-6.0%2B-green)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-8.0%2B-green)
 ![License](https://img.shields.io/badge/license-GPLv2%2B-blue)
 
-**Version 2.1.0**
+**Version 2.2.5**
 
 Frontend ACF uploader designed for paid membership websites. One entry per user with dynamic tier limits based on Paid Memberships Pro.
 
@@ -40,10 +40,24 @@ Frontend ACF uploader designed for paid membership websites. One entry per user 
 ## Usage
 
 ### Shortcode
-```shortcode
-[pe_tracker_uploader]
+shortcode:
+
+`[pe_tracker_uploader]`
 
 ### Changelog
+
+= 2.2.5 May 28, 2026 =
+Fixed "Either / Or" upload requirement — users can now upload just images, just video, or both (no more forced dual uploads)
+Improved Current Media section: Removed non-functional delete checkboxes, added clean "Manage your media files" anchor link at the top
+Enhanced frontend Video field to properly support WordPress Media Library selection (uploader => 'wp')
+Added media library restriction to show only current user’s uploads (matching Gallery behavior)
+Added three new Pet Details fields to plugin settings page:
+– Pet Description / Story
+– Emergency Email
+– Emergency Phone Number
+Integrated new Pet Details fields into frontend form (appear above Gallery/Video)
+Updated "Current Media & Pet Information" section to display saved pet details alongside media
+General code cleanup, improved field ordering, and better user guidance on the form
 
 = 2.1.0 = May 22, 2026
 * Major plugin structure refactor - organized into clean folders (`includes/`, `admin/`, `assets/`)

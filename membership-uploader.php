@@ -4,7 +4,7 @@
  * Description: Tiered frontend uploader for membership sites (PE Tracker). One entry per user + dynamic PMPro tier limits. Built on ACF Pro.
  * Author: WPProAtoZ
  * Author URI: https://wpproatoz.com
- * Version: 2.1.0
+ * Version: 2.2.5
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Text Domain: wpproatoz-acf-membership-uploader
@@ -17,7 +17,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Define plugin constants
-define('IV_PLUGIN_VERSION', '2.0.2');
+define('IV_PLUGIN_VERSION', '2.2.5');
 define('IV_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('IV_PLUGIN_URL', plugin_dir_url(__FILE__));
 
