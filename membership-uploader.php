@@ -4,7 +4,7 @@
  * Description: Tiered frontend uploader for membership sites (PE Tracker). One entry per user + dynamic PMPro tier limits. Built on ACF Pro.
  * Author: WPProAtoZ
  * Author URI: https://wpproatoz.com
- * Version: 2.2.8
+ * Version: 2.2.9
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Text Domain: wpproatoz-acf-membership-uploader
@@ -17,7 +17,7 @@
 if (!defined('ABSPATH')) exit;
 
 // Define plugin constants
-define('IV_PLUGIN_VERSION', '2.2.8');
+define('IV_PLUGIN_VERSION', '2.2.9');
 define('IV_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('IV_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -48,6 +48,12 @@ function iv_init_plugin() {
     // Future initialization hooks can go here
 }
 
+//hook into neighbor fields
+add_action('init', 'wpproatoz_register_neighbor_fields'); // Or in class-pmpro-integration.php
+function wpproatoz_register_neighbor_fields() {
+    // If using ACF JSON or manual, ensure field group loads
+    // Or hook into PMPro user fields if preferred
+}
 // ====================== PLUGIN ACTIVATION / DEACTIVATION ======================
 register_activation_hook(__FILE__, 'iv_activate_plugin');
 function iv_activate_plugin() {

@@ -5,7 +5,7 @@ Tags: acf, membership, frontend upload, paid memberships pro, image upload, vide
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 2.2.6
+Stable tag: 2.2.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,11 @@ Yes — it falls back to basic functionality, but tier limits require PMPro.
 3. Admin submissions list
 
 == Changelog ==
+
+= 2.2.9 June 18, 2026 =
+* Added private tiered Neighbor Email List with real lost pet alert system.
+* Real alerts include custom message, emergency contacts, video, and public tracker link.
+* Full integration with existing ACF/PMPro frontend uploader.
 
 = 2.2.8 June 18, 2026 =
 * Added configurable "Your Pet's Name" field with admin settings integration and frontend display

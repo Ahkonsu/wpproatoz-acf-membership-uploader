@@ -1,12 +1,12 @@
 # WPProAtoZ ACF Membership Uploader
 
 
-![Plugin Version](https://img.shields.io/badge/version-2.2.8-blue)
+![Plugin Version](https://img.shields.io/badge/version-2.2.9-blue)
 ![WordPress Compatibility](https://img.shields.io/badge/WordPress-6.0%2B-green)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-8.0%2B-green)
 ![License](https://img.shields.io/badge/license-GPLv2%2B-blue)
 
-**Version 2.2.6**
+**Version 2.2.9**
 
 Frontend ACF uploader designed for paid membership websites. One entry per user with dynamic tier limits based on Paid Memberships Pro.
 
@@ -25,8 +25,7 @@ Frontend ACF uploader designed for paid membership websites. One entry per user 
 
 ## Requirements
 
-- WordPress 7.0+
-- PHP 8.0+
+- WordPress 6.0+
 - Advanced Custom Fields Pro
 - Paid Memberships Pro (recommended for tiers)
 - Stripe or PayPal gateways (via PMPro)
@@ -41,9 +40,15 @@ Frontend ACF uploader designed for paid membership websites. One entry per user 
 ## Usage
 
 ### Shortcode
+
 [ pe_tracker_uploader ]
 
 ### Changelog
+
+= 2.2.9 June 18, 2026 =
+* Added private tiered Neighbor Email List with real lost pet alert system.
+* Real alerts include custom message, emergency contacts, video, and public tracker link.
+* Full integration with existing ACF/PMPro frontend uploader.
 
 = 2.2.8 June 18, 2026 =
 * Added configurable "Your Pet's Name" field with admin settings integration and frontend display

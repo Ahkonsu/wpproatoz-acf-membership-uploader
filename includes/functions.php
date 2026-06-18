@@ -207,3 +207,109 @@ function iv_update_permalink_on_title_change($post_id) {
     }
 }
 add_action('acf/save_post', 'iv_update_permalink_on_title_change', 25);  // After auto-publish hook
+
+//backend test ajax handler for pettracker email list
+add_action('wp_ajax_iv_send_test_pet_alert', 'iv_send_test_pet_alert');
+function iv_send_test_pet_alert() {
+    // Basic security - enhance with nonce later
+    if (!is_user_logged_in()) wp_send_json_error('Not logged in');
+    
+    $user_id = get_current_user_id();
+    $contacts = get_field('pettracker_neighbor_contacts', 'user_' . $user_id);
+    
+    if (empty($contacts)) {
+        wp_send_json_error('No contacts in your list.');
+    }
+    
+    $sent = 0;
+    foreach ($contacts as $c) {
+        $email = $c['pettracker_neighbor_contact__email'] ?? '';
+        if (!empty($email) && is_email($email)) {
+            wp_mail(
+                $email,
+                'Test Alert from PetTracker',
+                "This is a test notification from your neighbor on Petracker.com.\n\nA real alert would include their pet's video and details.\n\nStay vigilant!",
+                'From: alerts@petrackers.com'
+            );
+            $sent++;
+        }
+    }
+    wp_send_json_success('Test alert sent to ' . $sent . ' neighbors.');
+}
+
+// bacend real ajax hadler
+add_action('wp_ajax_iv_send_real_pet_alert', 'iv_send_real_pet_alert');
+function iv_send_real_pet_alert() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error('Not logged in');
+    }
+    
+    $user_id   = get_current_user_id();
+    $entry_id  = pe_get_or_create_user_entry();
+    $contacts  = get_field('pettracker_neighbor_contacts', 'user_' . $user_id);
+    $custom    = sanitize_textarea_field($_POST['custom_message'] ?? '');
+    
+    if (empty($contacts)) {
+        wp_send_json_error('No neighbors in your list.');
+    }
+    
+    // Gather pet data
+    $pet_name_key     = get_option('iv_pet_name_key', '');
+    $pet_desc_key     = get_option('iv_pet_description_key', '');
+    $emergency_email_key = get_option('iv_emergency_email_key', '');
+    $emergency_phone_key = get_option('iv_emergency_phone_key', '');
+    $video_key        = get_option('iv_video_field_key', '');
+    $public_toggle_key = 'pet_public';
+    
+    $pet_name     = get_field($pet_name_key, $entry_id) ?: 'Your Pet';
+    $description  = get_field($pet_desc_key, $entry_id) ?: '';
+    $emergency_email = get_field($emergency_email_key, $entry_id) ?: '';
+    $emergency_phone = get_field($emergency_phone_key, $entry_id) ?: '';
+    $video        = get_field($video_key, $entry_id);
+    $video_url    = $video ? $video['url'] : '';
+    $is_public    = get_field($public_toggle_key, $entry_id);
+    $tracker_url  = get_permalink($entry_id);
+    
+    $subject = "🚨 LOST PET ALERT: " . $pet_name;
+    
+    $message = "EMERGENCY: " . $pet_name . " is missing!\n\n";
+    if ($custom) {
+        $message .= "Last seen / additional details: " . $custom . "\n\n";
+    }
+    if ($description) {
+        $message .= "Pet Description: " . $description . "\n\n";
+    }
+    
+    // Emergency Contact Info
+    if ($emergency_email || $emergency_phone) {
+        $message .= "Emergency Contact:\n";
+        if ($emergency_email) $message .= "Email: " . $emergency_email . "\n";
+        if ($emergency_phone) $message .= "Phone: " . $emergency_phone . "\n";
+        $message .= "\n";
+    }
+    
+    // Shareable Tracker Link (only if public)
+    if ($is_public && $tracker_url) {
+        $message .= "📍 View full details and video here: " . esc_url($tracker_url) . "\n\n";
+    } else {
+        $message .= "Note: Public sharing is not yet enabled on the tracker page.\n\n";
+    }
+    
+    if ($video_url) {
+        $message .= "🎥 Video of " . $pet_name . ": " . $video_url . "\n\n";
+    }
+    
+    $message .= "Please help by checking your area and sharing with others. Thank you!\n\n";
+    $message .= "- Sent via Petracker.com Neighborhood Safety Network";
+    
+    $sent = 0;
+    foreach ($contacts as $c) {
+        $email = $c['pettracker_neighbor_contact__email'] ?? '';
+        if (is_email($email)) {
+            wp_mail($email, $subject, $message, 'From: alerts@petrackers.com');
+            $sent++;
+        }
+    }
+    
+    wp_send_json_success(['sent' => $sent]);
+}

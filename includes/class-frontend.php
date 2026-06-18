@@ -40,6 +40,27 @@ function iv_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'iv_scripts');
+// Tier limits + enforcement for neighbor contacts
+function iv_get_max_neighbors() {
+    if (!function_exists('pmpro_hasMembershipLevel') || !is_user_logged_in()) {
+        return 5;
+    }
+    $user_id = get_current_user_id();
+    if (pmpro_hasMembershipLevel('premium', $user_id)) return 999;
+    if (pmpro_hasMembershipLevel('basic', $user_id)) return 20;
+    return 5; // Free tier
+}
+
+add_filter('acf/update_value/name=pettracker_neighbor_contacts', 'iv_enforce_neighbor_limit', 10, 3);
+function iv_enforce_neighbor_limit($value, $post_id, $field) {
+    if (strpos($post_id ?? '', 'user_') !== 0) return $value;
+    $max = iv_get_max_neighbors();
+    if (is_array($value) && count($value) > $max) {
+        $value = array_slice($value, 0, $max);
+        // You could trigger a notice here if desired
+    }
+    return $value;
+}
 
 // ====================== ACF FORM HEAD ======================
 function iv_acf_form_head() {
@@ -152,6 +173,80 @@ function iv_display_submission_form() {
     // === CURRENT MEDIA & PET INFO DISPLAY ===
     echo '<div class="current-media" style="margin: 25px 0; padding: 25px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">';
     echo '<h3 style="margin-top:0;">Current Media & Pet Information</h3>';
+    
+    // ====================== NEIGHBOR EMAIL LIST SECTION ======================
+echo '<div class="neighbor-contacts-section" style="margin: 30px 0; padding: 25px; background: #f0f7ff; border: 1px solid #b3d4ff; border-radius: 8px;">';
+echo '<h3 style="margin-top:0;">📧 Your Private Neighbor Email List</h3>';
+echo '<p style="color:#555; margin-bottom:20px;">Pre-build your trusted contacts for instant alerts. Higher membership tiers allow more entries. These stay completely private.</p>';
+
+// Display current list
+echo '<div class="current-neighbors">';
+$repeater_key = 'pettracker_neighbor_contacts';
+$user_id = get_current_user_id();
+
+if (function_exists('have_rows') && have_rows($repeater_key, 'user_' . $user_id)) {
+    echo '<p><strong>Current Contacts:</strong></p><ul style="margin-bottom:20px;">';
+    while (have_rows($repeater_key, 'user_' . $user_id)) {
+        the_row();
+        $name  = get_sub_field('pettracker_neighbor_contact_name');
+        $email = get_sub_field('pettracker_neighbor_contact__email');  // Note: double underscore as you specified
+        $notes = get_sub_field('pettracker_neighbor_contact_notes');
+        echo '<li>' . esc_html($name ?: 'Neighbor') . ' — ' . esc_html($email) . 
+             ($notes ? ' <small>(' . esc_html($notes) . ')</small>' : '') . '</li>';
+    }
+    echo '</ul>';
+} else {
+    echo '<p style="font-style:italic; color:#666;">No neighbors added yet. Add some below.</p>';
+}
+
+// ACF Form for editing the repeater
+acf_form([
+    'post_id'      => 'user_' . $user_id,
+    'fields'       => [$repeater_key],
+    'submit_value' => '💾 Save Neighbor List',
+    'return'       => add_query_arg('updated', 'true', get_permalink()),
+    'form_attributes' => ['class' => 'neighbor-form'],
+]);
+
+echo '</div>';
+
+// Quick Send Test Button
+echo '<button type="button" onclick="sendTestPetAlert()" class="button button-secondary" style="margin-top:15px;">📤 Send Test Alert to List</button>';
+echo '<small style="display:block; margin-top:8px; color:#666;">(Sends sample notification — respects your tier limit)</small>';
+echo '</div>';
+// ====================== END NEIGHBOR EMAIL LIST ======================
+
+// ====================== REAL PET ALERT SECTION ======================
+echo '<div class="real-pet-alert-section" style="margin: 30px 0; padding: 25px; background: #ffebee; border: 2px solid #d32f2f; border-radius: 8px;">';
+echo '<h3 style="margin-top:0; color:#c62828;">🚨 SEND REAL LOST PET ALERT</h3>';
+echo '<p style="color:#555; margin-bottom:20px;">When your pet goes missing, use this to instantly notify your entire private neighbor list.</p>';
+
+// Custom message / last seen input
+echo '<label for="alert_custom_message"><strong>Custom Message (Last Seen, Description, etc.):</strong></label><br>';
+echo '<textarea id="alert_custom_message" rows="4" style="width:100%; max-width:600px; margin-bottom:15px;" placeholder="Last seen near Gordon River trail at 2PM today..."></textarea>';
+
+// Big Red Button
+echo '<button type="button" onclick="sendRealPetAlert()" style="background:#d32f2f; color:white; font-size:1.2em; padding:15px 30px; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">🚨 SEND REAL ALERT TO ALL NEIGHBORS NOW</button>';
+echo '<small style="display:block; margin-top:12px; color:#c62828;">This will email your full private neighbor list with pet details + video. Irreversible action — use only when pet is actually lost.</small>';
+echo '</div>';
+// ====================== END REAL ALERT SECTION ======================
+
+// Simple ACF form snippet for editing the repeater (or integrate into main acf_form if preferred)
+acf_form([
+    'post_id' => 'user_' . get_current_user_id(),
+    'fields' => [$neighbor_repeater_key],
+    'submit_value' => 'Save Neighbor List',
+    'return' => add_query_arg('updated', 'true', get_permalink()),
+    'form_attributes' => ['class' => 'neighbor-form'],
+]);
+
+echo '</div>';
+
+// Quick Send Test Button
+echo '<button type="button" onclick="sendTestPetAlert()" class="button button-secondary" style="margin-top:15px;">📤 Send Test Alert to List</button>';
+echo '<small style="display:block; margin-top:8px; color:#666;">(Sends a sample notification to all emails in your list)</small>';
+echo '</div>';
+// ====================== END NEIGHBOR EMAIL LIST ======================
 	
 	// ====================== SHARE LINK SECTION ======================
     echo '<div class="share-tracker-box" style="margin: 30px 0; padding: 25px; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px;">';
