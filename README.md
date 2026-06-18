@@ -1,12 +1,12 @@
 # WPProAtoZ ACF Membership Uploader
 
 
-![Plugin Version](https://img.shields.io/badge/version-2.2.5-blue)
+![Plugin Version](https://img.shields.io/badge/version-2.2.6-blue)
 ![WordPress Compatibility](https://img.shields.io/badge/WordPress-6.0%2B-green)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-8.0%2B-green)
 ![License](https://img.shields.io/badge/license-GPLv2%2B-blue)
 
-**Version 2.2.5**
+**Version 2.2.6**
 
 Frontend ACF uploader designed for paid membership websites. One entry per user with dynamic tier limits based on Paid Memberships Pro.
 
@@ -40,24 +40,24 @@ Frontend ACF uploader designed for paid membership websites. One entry per user 
 ## Usage
 
 ### Shortcode
-shortcode:
-
-`[pe_tracker_uploader]`
+```shortcode
+[pe_tracker_uploader]
 
 ### Changelog
 
-= 2.2.5 May 28, 2026 =
-Fixed "Either / Or" upload requirement — users can now upload just images, just video, or both (no more forced dual uploads)
-Improved Current Media section: Removed non-functional delete checkboxes, added clean "Manage your media files" anchor link at the top
-Enhanced frontend Video field to properly support WordPress Media Library selection (uploader => 'wp')
-Added media library restriction to show only current user’s uploads (matching Gallery behavior)
-Added three new Pet Details fields to plugin settings page:
-– Pet Description / Story
-– Emergency Email
-– Emergency Phone Number
-Integrated new Pet Details fields into frontend form (appear above Gallery/Video)
-Updated "Current Media & Pet Information" section to display saved pet details alongside media
-General code cleanup, improved field ordering, and better user guidance on the form
+= 2.2.7 June 12, 2026 =
+* Added code to limit registration to specific emails
+* minor tweaks to code
+
+= 2.2.6 May 29, 2026 =
+* Added full public sharing support for Pet Tracker entries
+* Implemented clean permalink structure using /pet-tracker-page/ slug (even for drafts)
+* Added "Make Public" toggle (ACF True/False field) on frontend uploader
+* Auto-publish entry when user enables "Make Public"
+* Added prominent "Share Your Tracker" box on frontend with live shareable link
+* Added one-click "Copy Share Link" functionality with visual feedback
+* Enhanced visibility logic: Owners can always view (even drafts), public users only see published + public entries
+* Improved draft notices and user feedback throughout
 
 = 2.1.0 = May 22, 2026
 * Major plugin structure refactor - organized into clean folders (`includes/`, `admin/`, `assets/`)

@@ -5,7 +5,7 @@ Tags: acf, membership, frontend upload, paid memberships pro, image upload, vide
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 2.2.5
+Stable tag: 2.2.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,20 @@ Yes — it falls back to basic functionality, but tier limits require PMPro.
 3. Admin submissions list
 
 == Changelog ==
+
+= 2.2.7 June 12, 2026 =
+Added code to limit registration to specific emails
+minor tweaks to code
+
+= 2.2.6 May 29, 2026 =
+* Added full public sharing support for Pet Tracker entries
+* Implemented clean permalink structure using /pet-tracker-page/ slug (even for drafts)
+* Added "Make Public" toggle (ACF True/False field) on frontend uploader
+* Auto-publish entry when user enables "Make Public"
+* Added prominent "Share Your Tracker" box on frontend with live shareable link
+* Added one-click "Copy Share Link" functionality with visual feedback
+* Enhanced visibility logic: Owners can always view (even drafts), public users only see published + public entries
+* Improved draft notices and user feedback throughout
 
 = 2.2.5 May 28, 2026 =
 Fixed "Either / Or" upload requirement — users can now upload just images, just video, or both (no more forced dual uploads)

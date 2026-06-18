@@ -79,3 +79,105 @@ function iv_get_max_image_size() {
 function iv_get_max_video_size() {
     return get_option('iv_max_video_size_mb', 30) * 1024 * 1024;
 }
+
+
+// ================================================
+// PET TRACKER PUBLIC URL + VISIBILITY
+// ================================================
+
+function petracker_force_permalink($permalink, $post) {
+    if (empty($post) || $post->post_type !== 'pe_tracker_entry') {
+        return $permalink;
+    }
+
+    if (empty($post->post_name)) {
+        if (!empty($post->post_title)) {
+            $post->post_name = sanitize_title($post->post_title);
+        } else {
+            $post->post_name = 'pet-' . $post->ID;
+        }
+    }
+
+    return home_url('/pet-tracker-page/' . $post->post_name . '/');
+}
+add_filter('post_type_link', 'petracker_force_permalink', 10, 2);
+add_filter('preview_post_link', 'petracker_force_permalink', 10, 2);
+
+/**
+ * Auto-publish when user enables "Make Public"
+ */
+function petracker_auto_publish_on_public($post_id) {
+    if (get_post_type($post_id) !== 'pe_tracker_entry') {
+        return;
+    }
+
+    $is_public = get_field('pet_public', $post_id);
+    if (!empty($is_public)) {
+        wp_update_post([
+            'ID'          => $post_id,
+            'post_status' => 'publish'
+        ]);
+    }
+}
+add_action('acf/save_post', 'petracker_auto_publish_on_public', 20);
+
+/**
+ * Visibility Control
+ */
+function petracker_public_visibility_check() {
+    if (!is_singular('pe_tracker_entry')) {
+        return;
+    }
+
+    $post = get_queried_object();
+    if (!$post || $post->post_type !== 'pe_tracker_entry') {
+        return;
+    }
+
+    $is_public = get_field('pet_public', $post->ID);
+    $current_user_id = get_current_user_id();
+    $post_author_id  = (int) $post->post_author;
+
+    // Owner can always view
+    if (is_user_logged_in() && $current_user_id === $post_author_id) {
+        return;
+    }
+
+    // Public visitors
+    if (get_post_status($post->ID) !== 'publish' || empty($is_public)) {
+        wp_die('This Pet Tracker is not publicly available yet.', 'Access Restricted', ['response' => 403]);
+    }
+}
+add_action('template_redirect', 'petracker_public_visibility_check', 15);
+
+/**
+ * Restrict registration to specific emails for alpha stage (Caretaker accounts).
+ * 
+ * Place in: includes/class-validation.php
+ * Hook into: pmpro_registration_checks (or your existing validation method).
+ */
+function wpproatoz_restrict_alpha_emails( $continue, $user ) {
+    // Define your approved emails (add more as needed for alpha testers)
+    $allowed_emails = array(
+        'tester1@petrackers.com/',
+        'tester2@petrackers.com',
+        // Add your invite list here
+    );
+
+    // Get the email from the checkout submission
+    $email = isset( $_REQUEST['bemail'] ) ? sanitize_email( $_REQUEST['bemail'] ) : '';
+
+    if ( ! empty( $email ) && ! in_array( $email, $allowed_emails, true ) ) {
+        // Optional: You could make this level-specific if needed
+        // global $pmpro_level;
+        // if ( $pmpro_level && $pmpro_level->id == YOUR_CARETAKER_LEVEL_ID ) { ... }
+
+        pmpro_setMessage( 'Alpha/Beta access is currently by invite-only. ' .
+                         'Please use an approved email address or ' .
+                         '<a href="https://petrackers.com/alpha-beta-wait-list/" target="_blank" rel="noopener">join our wait-list here</a>.', 'pmpro_error' );
+        $continue = false;
+    }
+
+    return $continue;
+}
+add_filter( 'pmpro_registration_checks', 'wpproatoz_restrict_alpha_emails', 10, 2 );

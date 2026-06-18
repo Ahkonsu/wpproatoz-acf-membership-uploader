@@ -98,6 +98,9 @@ function iv_display_submission_form() {
     $pet_description_key = get_option('iv_pet_description_key', '');
     $emergency_email_key = get_option('iv_emergency_email_key', '');
     $emergency_phone_key = get_option('iv_emergency_phone_key', '');
+	
+	// === NEW: Public Toggle Field ===
+    $public_toggle_key = 'pet_public';   // Must match your ACF field name
 
     // Build list of fields to show in form - ORDER MATTERS
     $fields = [];
@@ -114,6 +117,9 @@ function iv_display_submission_form() {
     if (empty($fields)) {
         return '<p><strong>Configuration Error:</strong> No ACF fields configured.</p>';
     }
+	
+	// 3. Public Toggle (Add at the end)
+    $fields[] = $public_toggle_key;
 
     $entry_id = pe_get_or_create_user_entry();
 
@@ -134,6 +140,29 @@ function iv_display_submission_form() {
     // === CURRENT MEDIA & PET INFO DISPLAY ===
     echo '<div class="current-media" style="margin: 25px 0; padding: 25px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">';
     echo '<h3 style="margin-top:0;">Current Media & Pet Information</h3>';
+	
+	// ====================== SHARE LINK SECTION ======================
+    echo '<div class="share-tracker-box" style="margin: 30px 0; padding: 25px; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 10px;">';
+    echo '<h3 style="margin-top:0; color:#2e7d32;">📤 Share Your Pet Tracker</h3>';
+    
+    $tracker_url = get_permalink($entry_id);
+    $is_public   = get_field('pet_public', $entry_id);
+    $status      = get_post_status($entry_id);
+
+    echo '<p><strong>Tracker Link:</strong></p>';
+    echo '<div id="tracker-link-box" style="background:#fff; padding:14px; border:1px solid #ddd; border-radius:6px; font-family:monospace; word-break:break-all; margin:12px 0; font-size:1.05em;">';
+    echo esc_url($tracker_url);
+    echo '</div>';
+
+    if ($status === 'publish' && !empty($is_public)) {
+        echo '<button type="button" onclick="copyTrackerLink()" class="button button-primary" style="background:#4caf50; border:none; padding:10px 20px;">📋 Copy Share Link</button>';
+        echo '<p style="margin-top:15px; color:#2e7d32;">✅ Link is public and ready to share with neighbors!</p>';
+    } else {
+        echo '<p style="color:#d32f2f; margin-top:10px;">🔒 Toggle "<strong>Make Public</strong>" and click Save to activate sharing.</p>';
+    }
+
+    echo '</div>';
+    // ====================== END SHARE SECTION ======================
 
     $has_media = false;
 
@@ -190,7 +219,11 @@ function iv_display_submission_form() {
     }
     echo '</div>';
 
-    echo '</div>'; // end current-media
+    echo '</div>'; 
+	
+	
+	
+	// end current-media
 
     // === UPLOAD / MANAGE MEDIA SECTION ===
     echo '<div id="pe-tracker-upload-section" style="margin-top:40px;">';
