@@ -1,7 +1,7 @@
 # WPProAtoZ ACF Membership Uploader
 
 
-![Plugin Version](https://img.shields.io/badge/version-2.2.6-blue)
+![Plugin Version](https://img.shields.io/badge/version-2.2.8-blue)
 ![WordPress Compatibility](https://img.shields.io/badge/WordPress-6.0%2B-green)
 ![PHP Compatibility](https://img.shields.io/badge/PHP-8.0%2B-green)
 ![License](https://img.shields.io/badge/license-GPLv2%2B-blue)
@@ -25,7 +25,8 @@ Frontend ACF uploader designed for paid membership websites. One entry per user 
 
 ## Requirements
 
-- WordPress 6.0+
+- WordPress 7.0+
+- PHP 8.0+
 - Advanced Custom Fields Pro
 - Paid Memberships Pro (recommended for tiers)
 - Stripe or PayPal gateways (via PMPro)
@@ -40,10 +41,16 @@ Frontend ACF uploader designed for paid membership websites. One entry per user 
 ## Usage
 
 ### Shortcode
-```shortcode
-[pe_tracker_uploader]
+[ pe_tracker_uploader ]
 
 ### Changelog
+
+= 2.2.8 June 18, 2026 =
+* Added configurable "Your Pet's Name" field with admin settings integration and frontend display
+* Enabled editable CPT title ("My Tracker Page Title") on the [pe_tracker_uploader] My Tracker page
+* Added automatic permalink/slug update when title is changed on frontend
+* Improved current pet information display section
+* Minor UI/UX refinements for better user experience
 
 = 2.2.7 June 12, 2026 =
 * Added code to limit registration to specific emails

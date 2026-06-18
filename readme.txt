@@ -67,6 +67,13 @@ Yes — it falls back to basic functionality, but tier limits require PMPro.
 
 == Changelog ==
 
+= 2.2.8 June 18, 2026 =
+* Added configurable "Your Pet's Name" field with admin settings integration and frontend display
+* Enabled editable CPT title ("My Tracker Page Title") on the [pe_tracker_uploader] My Tracker page
+* Added automatic permalink/slug update when title is changed on frontend
+* Improved current pet information display section
+* Minor UI/UX refinements for better user experience
+
 = 2.2.7 June 12, 2026 =
 Added code to limit registration to specific emails
 minor tweaks to code

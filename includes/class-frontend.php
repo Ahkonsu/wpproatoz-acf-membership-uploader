@@ -4,6 +4,14 @@
  */
 if (!defined('ABSPATH')) exit;
 
+// Customize frontend title label more reliably
+add_filter('gettext', 'iv_rename_post_title_label', 20, 3);
+function iv_rename_post_title_label($translated_text, $text, $domain) {
+    if ($text === 'Title' && !is_admin() && is_page() && has_shortcode(get_post()->post_content ?? '', 'pe_tracker_uploader')) {
+        return 'My Tracker Page Title (This becomes your shareable public link)';
+    }
+    return $translated_text;
+}
 // ====================== FRONTEND SCRIPTS & STYLES ======================
 function iv_scripts() {
     wp_enqueue_style('iv-style', IV_PLUGIN_URL . 'assets/css/iv-style.css', [], IV_PLUGIN_VERSION);
@@ -95,9 +103,12 @@ function iv_display_submission_form() {
     $video_key = get_option('iv_video_field_key', '');
 
     // NEW: Pet Detail Field Keys
+    $pet_name_key = get_option('iv_pet_name_key', '');
     $pet_description_key = get_option('iv_pet_description_key', '');
     $emergency_email_key = get_option('iv_emergency_email_key', '');
     $emergency_phone_key = get_option('iv_emergency_phone_key', '');
+    // NEW: Pet Name Field
+    $pet_name_key = get_option('iv_pet_name_key', '');  // Will store the field key from settings
 	
 	// === NEW: Public Toggle Field ===
     $public_toggle_key = 'pet_public';   // Must match your ACF field name
@@ -106,6 +117,7 @@ function iv_display_submission_form() {
     $fields = [];
 
     // 1. Pet Details (appear first)
+    if (!empty($pet_name_key)) $fields[] = $pet_name_key;  // ← NEW: Pet Name first
     if (!empty($pet_description_key)) $fields[] = $pet_description_key;
     if (!empty($emergency_email_key)) $fields[] = $emergency_email_key;
     if (!empty($emergency_phone_key)) $fields[] = $emergency_phone_key;
@@ -200,6 +212,13 @@ function iv_display_submission_form() {
     // Pet Details in Current Info
     echo '<div style="margin-top:30px; padding-top:20px; border-top:1px solid #ddd;">';
     echo '<h4>Pet Details</h4>';
+        // Current Pet Name
+    if (!empty($pet_name_key)) {
+        $pet_name = get_field($pet_name_key, $entry_id);
+        if (!empty($pet_name)) {
+            echo '<p><strong>Pet Name:</strong> ' . esc_html($pet_name) . '</p>';
+        }
+    }
     // (existing pet details display code - keep as is)
     if (!empty($pet_description_key)) {
         $description = get_field($pet_description_key, $entry_id);
@@ -228,11 +247,26 @@ function iv_display_submission_form() {
     // === UPLOAD / MANAGE MEDIA SECTION ===
     echo '<div id="pe-tracker-upload-section" style="margin-top:40px;">';
     echo '<h3>Update Your Pet Information & Media</h3>';
+    echo '<div style="margin-bottom:20px;">';
+echo '<label for="post_title" style="font-weight:600;">Tracker Page Title <span style="color:#666; font-size:0.9em;">(This becomes your shareable public link)</span></label>';
+echo '</div>';
     echo '<p style="color:#555; margin-bottom:25px;">Fill in your pet details and upload media below.</p>';
+
+// Custom Title Field Label + Input (overrides default)
+// Custom post title label (hides default "Title" label)
+    echo '<style>
+        #acf-form-post-title-label { display: none !important; } /* Hide default ACF/Title label */
+    </style>';
+
+    // Custom visible label
+    echo '<div style="margin: 15px 0 8px 0;">';
+    echo '<label style="font-weight:600; display:block; font-size:1.05em;">My Tracker Page Title 
+          <span style="color:#666; font-size:0.9em;">(This becomes your shareable public link)</span></label>';
+    echo '</div>';
 
     acf_form([
         'post_id'           => $entry_id,
-        'post_title'        => false,
+        'post_title'        => true,  // ← Enable editing
         'post_content'      => false,
         'fields'            => $fields,        // ← Now includes new fields
         'submit_value'      => 'Save My PE Tracker Updates',
@@ -241,6 +275,7 @@ function iv_display_submission_form() {
         'html_before_fields'=> '<input type="text" name="iv_honeypot" style="display:none;" value="">',
         'html_after_fields' => $recaptcha_html,
         'uploader'          => 'wp'
+        
     ]);
 
     echo '</div>';

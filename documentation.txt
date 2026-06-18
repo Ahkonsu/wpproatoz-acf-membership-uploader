@@ -1,83 +1,93 @@
-ACF Image & Video Frontend Submission Form - Documentation
+WPProAtoZ ACF Membership Uploader - Documentation
 Overview
-The ACF Image & Video Frontend Submission Form plugin enables users to submit image and video uploads via a frontend form, integrated with Advanced Custom Fields Pro (ACF Pro). It uses a configurable custom post type (default: image-video-submission) with fields for title, content, and upload. The plugin includes customizable field labels, upload restrictions, reCAPTCHA v2/v3, public/private form access, and admin management tools.
+The WPProAtoZ ACF Membership Uploader plugin provides a powerful frontend submission form for Paid Memberships Pro (PMPro) membership sites. It is built around Advanced Custom Fields Pro (ACF Pro) and enables logged-in members to manage a single "Pet Tracker" entry (one entry per user). 
+
+Key capabilities include:
+- Dynamic tier-based limits (e.g., number of images and video file size based on the user's PMPro membership level)
+- Gallery (images) + File (video) field support
+- Automatic integration into the PMPro "Account" page ("My PE Tracker" section)
+- Public sharing with clean permalinks (/pet-tracker-page/ slug), even for drafts
+- "Make Public" toggle that auto-publishes the entry
+- Shareable link box with one-click copy functionality
+- Spam protection (reCAPTCHA v3 + honeypot)
+- Admin moderation (entries start as Drafts by default)
+- Optional image/video uploads with delete functionality
+
+The plugin is ideal for PetTracker.com and similar neighborhood-powered pet safety platforms.
+
 Shortcodes
+[pe_tracker_uploader]
+Displays the frontend uploader form for the current logged-in user.
+- Automatically creates a new tracker entry on first use or loads the existing one.
+- Supports image gallery and video upload fields (configured via ACF).
+- Includes dynamic limits based on PMPro tier.
+- Shows current media with delete options and a video player.
+- Features "Make Public" toggle and prominent "Share Your Tracker" section with live permalink.
 
-[image_video_submission]
-
-
-Displays a frontend form for submitting submissions.
-Fields: Title, Content, Upload (30 MB max, .mov, .mp4, .m4v).
-Usage: Add [image_video_submission] to a page or post content.
-Behavior:
-Public mode: Allows guest submissions (author set to admin, ID 1).
-Private mode: Requires logged-in users (author set to current user).
-Includes reCAPTCHA v2 (Checkbox) or v3 (Invisible) if enabled, or a honeypot for spam protection.
-Displays a warning: "Video files limited to .mov, .m4v, .mp4 files only and files limited to 30MB max."
-Submits as a Pending post for admin review.
-
-
-
-[image_video_submissions limit="5"]
-
-
-Displays a list of published submissions.
-Attributes:
-limit: Number of submissions to show (default: 5).
-
-Usage: Add [image_video_submissions limit="3"] to a page or post.
-Displays: Title, upload (if uploaded), and content for each submission.
+Usage: Add [pe_tracker_uploader] to a dedicated page (e.g., "My Pet Tracker") and link it from the PMPro account area.
 
 Setup Instructions
-
 Installation:
-Upload the wpproatoz-acf-image-video-submission folder to /wp-content/plugins/.
-Activate the plugin via the WordPress admin Plugins page.
-Install and activate Advanced Custom Fields Pro (ACF Pro) when prompted.
+1. Place the wpproatoz-acf-membership-uploader folder in /wp-content/plugins/.
+2. Activate the plugin via the WordPress admin Plugins page.
+3. Install and activate Advanced Custom Fields Pro (ACF Pro) and Paid Memberships Pro.
 
 Configuration:
-Go to Image & Video Submissions > ACF Custom Form in the WordPress admin.
-Custom Post Type Slug: Set the CPT slug (default: image-video-submission).
-ACF Field Key: Set the upload field key (default: field_682e59ec3b45a).
-Form Access:
-Public: Allows guests to submit submissions.
-Private: Restricts to logged-in users.
+Go to Membership Uploader → Settings in the WordPress admin.
 
-reCAPTCHA:
-None: Uses a honeypot for basic spam protection.
-v2 (Checkbox): Requires users to check "I'm not a robot."
-v3 (Invisible): Validates in the background with a score threshold (0.0 to 1.0, default 0.5).
-Obtain keys at https://www.google.com/recaptcha/admin and enter Site Key and Secret Key.
+Required Settings:
+- Custom Post Type Slug: Set the CPT slug (e.g., pe-tracker or pet-tracker).
+- Gallery Field Key: ACF field key for the image gallery (e.g., field_abc123...).
+- Video Field Key: ACF field key for the video file field.
+- Make Public Field Key: ACF True/False field key for the public toggle.
 
-Field Labels:
-Customize labels for Title, Content, and Upload (e.g., "Submission Title", "Description", "Upload Image/Video").
+Additional Options:
+- reCAPTCHA: Enable v3 (Invisible) with Site Key and Secret Key (recommended). Obtain keys at https://www.google.com/recaptcha/admin.
+- Form Access: Restricted to logged-in PMPro members.
+- Default Status: Draft (recommended for moderation) or Publish.
 
-Save settings.
+Field Setup in ACF Pro:
+Create a Group assigned to your CPT. Include:
+- Gallery field (for images)
+- File field (for video)
+- True/False field ("Make Public")
 
-Using Shortcodes:
-Create a page (e.g., "Submit Submission") and add [image_video_submission].
-Create a page (e.g., "Submissions") and add [image_video_submissions limit="5"].
-Ensure the CPT and upload field are set up in ACF Pro.
+PMPro Integration:
+The plugin automatically adds a "My PE Tracker" section to the membership account page. Ensure your PMPro levels have associated tier limits defined in plugin settings or code.
+
+Using the Shortcode:
+- Create or edit a page (e.g., "My Pet Tracker") and insert [pe_tracker_uploader].
+- Link this page in your membership navigation.
+- Members can upload/introduce their pet via video, add images, and toggle public sharing.
+
+Public Visibility:
+- Owners always see their entry (even drafts).
+- Public users see only published entries where "Make Public" is enabled.
+- Clean permalink support for sharing.
 
 Managing Submissions:
-Go to Image & Video Submissions > All Submissions to view submissions.
-Use Image & Video Submissions > Manage Submissions to toggle statuses (Publish, Private, Draft).
-Published submissions appear on the frontend via [image_video_submissions].
+Go to your CPT (e.g., Pet Trackers > All Entries) in the admin.
+- Moderate drafts.
+- View/edit member trackers.
+- Published + public entries appear on frontend where appropriate.
 
-Upload Restrictions:
-Files must be .mov, .mp4, or .m4v.
-Maximum size: 30 MB.
-A warning message appears below the Upload field.
-Client-side and server-side validation enforce restrictions.
-
+Upload Restrictions & Tier Limits:
+- Limits are dynamic per PMPro membership level (configured in plugin/code).
+- Video size limits enforced client- and server-side.
+- Images: Gallery-based (tier-dependent count).
+- Warning messages displayed on the form.
 
 Troubleshooting
-
-Form Not Displaying: Ensure ACF Pro is active and the CPT exists.
-Upload Fails: Check php.ini settings (upload_max_filesize = 30M, post_max_size = 32M).
-Labels Not Updating: Clear browser/server cache and verify settings in ACF Custom Form.
-reCAPTCHA Issues: Confirm valid keys and correct domain at https://www.google.com/recaptcha/admin.
-Debugging: Check /wp-content/debug.log if debug mode is enabled (WP_DEBUG = true).
+Form Not Displaying: Ensure ACF Pro is active, user is logged in with a valid PMPro membership, and the CPT + fields exist.
+Upload Fails: Check php.ini (upload_max_filesize, post_max_size). Verify ACF field keys in settings.
+Tier Limits Not Applying: Confirm PMPro integration and membership level mapping.
+reCAPTCHA Issues: Validate keys and domain at Google reCAPTCHA admin.
+Sharing/Permalinks: Flush permalinks after changes (Settings > Permalinks).
+Debugging: Enable WP_DEBUG and check /wp-content/debug.log.
 
 Support
-Contact WPProAtoZ at https://wpproatoz.com for assistance.
+Contact WPProAtoZ at https://wpproatoz.com or via the GitHub repo: https://github.com/Ahkonsu/wpproatoz-acf-membership-uploader
+
+Mission Alignment (PetTracker.com)
+[Insert full missionpetrackers.txt content here or link/reference it]
+This plugin powers the core "pre-planned action" by enabling quick neighborhood notification via pre-introduced pet videos and images.

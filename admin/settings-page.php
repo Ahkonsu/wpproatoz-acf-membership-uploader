@@ -48,6 +48,7 @@ function iv_settings_page() {
         $pet_description_key = sanitize_text_field($_POST['iv_pet_description_key'] ?? '');
         $emergency_email_key = sanitize_text_field($_POST['iv_emergency_email_key'] ?? '');
         $emergency_phone_key = sanitize_text_field($_POST['iv_emergency_phone_key'] ?? '');
+        $pet_name_key = sanitize_text_field($_POST['iv_pet_name_key'] ?? '');
 
         $max_image_mb = max(1, min(500, intval($_POST['iv_max_image_size_mb'] ?? 1)));
         $max_video_mb = max(1, min(500, intval($_POST['iv_max_video_size_mb'] ?? 30)));
@@ -65,6 +66,7 @@ function iv_settings_page() {
         update_option('iv_pet_description_key', $pet_description_key);
         update_option('iv_emergency_email_key', $emergency_email_key);
         update_option('iv_emergency_phone_key', $emergency_phone_key);
+        update_option('iv_pet_name_key', $pet_name_key);
 
         update_option('iv_max_image_size_mb', $max_image_mb);
         update_option('iv_max_video_size_mb', $max_video_mb);
@@ -99,9 +101,11 @@ function iv_settings_page() {
     $video_field_key = get_option('iv_video_field_key', '');
 
     // NEW: Load Pet Detail Field Keys
+    $pet_name_key = get_option('iv_pet_name_key', '');
     $pet_description_key = get_option('iv_pet_description_key', '');
     $emergency_email_key = get_option('iv_emergency_email_key', '');
     $emergency_phone_key = get_option('iv_emergency_phone_key', '');
+    $pet_name_key        = get_option('iv_pet_name_key', '');
 
     $max_image_mb = get_option('iv_max_image_size_mb', 1);
     $max_video_mb = get_option('iv_max_video_size_mb', 30);
@@ -179,6 +183,14 @@ function iv_settings_page() {
                     <td>
                         <input type="text" name="iv_emergency_phone_key" value="<?php echo esc_attr($emergency_phone_key); ?>" class="regular-text">
                         <p class="description">ACF Field Key for Emergency Phone Number</p>
+                    </td>
+                </tr>
+                <!-- NEW: Pet Name -->
+                <tr>
+                    <th scope="row"><label for="iv_pet_name_key">Your Pet's Name Field Key</label></th>
+                    <td>
+                        <input type="text" name="iv_pet_name_key" value="<?php echo esc_attr($pet_name_key); ?>" class="regular-text">
+                        <p class="description">ACF Field Key for "Your Pet's Name" (Text field)</p>
                     </td>
                 </tr>
                 <!-- ========================================================== -->

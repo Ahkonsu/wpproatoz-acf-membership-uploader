@@ -27,7 +27,8 @@ function pe_get_or_create_user_entry() {
 
     // Create new entry
     return wp_insert_post([
-        'post_title'   => 'My PE Tracker - ' . date('F Y'),
+        'post_title'   => 'My Pet Tracker - ' . date('F Y'),
+        'post_title'   => $new_title,
         'post_type'    => $cpt_slug,
         'post_status'  => 'draft',
         'post_author'  => $user_id,
@@ -181,3 +182,28 @@ function wpproatoz_restrict_alpha_emails( $continue, $user ) {
     return $continue;
 }
 add_filter( 'pmpro_registration_checks', 'wpproatoz_restrict_alpha_emails', 10, 2 );
+
+/**
+ * Update permalink/slug when title changes on frontend
+ */
+function iv_update_permalink_on_title_change($post_id) {
+    if (get_post_type($post_id) !== get_option('iv_cpt_slug', 'pe_tracker_entry')) {
+        return;
+    }
+
+    // Only run for frontend saves from our form (or always for this CPT)
+    if (wp_is_post_revision($post_id) || !is_user_logged_in()) {
+        return;
+    }
+
+    $post = get_post($post_id);
+    $new_slug = sanitize_title($post->post_title);
+
+    if ($post->post_name !== $new_slug && !empty($new_slug)) {
+        wp_update_post([
+            'ID'        => $post_id,
+            'post_name' => $new_slug,
+        ]);
+    }
+}
+add_action('acf/save_post', 'iv_update_permalink_on_title_change', 25);  // After auto-publish hook
